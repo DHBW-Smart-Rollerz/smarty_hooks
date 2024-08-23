@@ -3,33 +3,36 @@
 
 import subprocess
 import argparse
+import os
 
 
 def reformat_ros_folder(ros_version):
-
     # Get all file names of changed files in the staging area
-    changed_files = subprocess.run(
-        ["git", "diff", "--cached", "--name-only"], stdout=subprocess.PIPE
-    ).stdout.decode("utf-8")
-    changed_files = changed_files.split("\n")
-    changed_files = list(filter(None, changed_files))
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--cached", "--name-only"],
+            stdout=subprocess.PIPE,
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred while getting changed files: {e}")
+        exit(1)
+    changed_files = result.stdout.decode("utf-8").splitlines()
+
+    if not changed_files:
+        print("No files to reformat.")
+        return
+
+    # Prepare the command to source the ROS environment and run ament_uncrustify
+    command = f"source /opt/ros/{ros_version}/setup.bash && ament_uncrustify --reformat {' '.join(changed_files)}"
 
     try:
-        subprocess.run(
-            [
-                "bash",
-                "-c",
-                f"source /opt/ros/{ros_version}/setup.bash && ament_uncrustify --reformat {' '.join(changed_files)}",
-            ],
-            check=True,
-            shell=True,
-        )
+        # Run the command in a shell
+        subprocess.run(command, check=True, shell=True, executable="/bin/bash")
         print("ROS folder reformatted successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while reformatting ROS folder: {e}")
         exit(1)
-
-    exit(0)
 
 
 if __name__ == "__main__":
