@@ -10,7 +10,7 @@ def reformat_ros_folder(ros_version):
     # Get all file names of changed files in the staging area
     try:
         result = subprocess.run(
-            ["git", "diff", "--cached", "--name-only"],
+            ["git", "diff", "--staged", "--name-only"],
             stdout=subprocess.PIPE,
             check=True,
         )
@@ -38,7 +38,10 @@ def reformat_ros_folder(ros_version):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "ros_version", type=str, help="ROS version of the package to be reformatted"
+        "ros_version",
+        type=str,
+        default="jazzy",
+        help="ROS version of the package to be reformatted",
     )
     args = parser.parse_args()
 

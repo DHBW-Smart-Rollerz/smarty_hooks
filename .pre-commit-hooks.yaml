@@ -1,5 +1,7 @@
 - id: ament_uncrustify
   name: Ament Uncrustify
   description: 'Runs uncrustify on C/C++ files'
-  entry: ament_uncrustify
+  entry: my_ament_uncrustify --reformat
   language: python
+  # args: ['jazzy']
+  files: \.(c|cpp|h|hpp)$

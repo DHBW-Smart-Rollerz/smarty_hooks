@@ -1,7 +1,7 @@
 class MyTest {
 public:
-    MyTest() {}
-    ~MyTest() {}
+  MyTest() {}
+  ~MyTest() {}
     void test() {
         int a = 1;
         int b = 2;
