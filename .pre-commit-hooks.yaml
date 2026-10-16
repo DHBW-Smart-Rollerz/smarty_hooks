@@ -3,5 +3,5 @@
   description: 'Runs uncrustify on C/C++ files'
   entry: my_ament_uncrustify --reformat
   language: python
-  # args: ['jazzy']
+  # optional args: [--ros-distro, <distro>] (default: $ROS_DISTRO or jazzy)
   files: \.(c|cpp|h|hpp)$
